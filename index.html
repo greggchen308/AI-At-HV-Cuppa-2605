@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cuppa In HV | May 2 2026</title>
+
+    <!-- Fraunces: distinctive editorial serif. Work Sans: clean, legible body. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* === CSS CUSTOM PROPERTIES: VINTAGE EDITORIAL THEME === */
+        :root {
+            --bg-cream: #f5f3ee;
+            --bg-card: #faf9f6;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5550;
+            --accent-warm: #c8977a;
+            --accent-light: #ead9cc;
+            --accent-faint: #f2e8e0;
+            --border-accent: #c8977a;
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Work Sans', sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.7s;
+
+            /* Typography — ALL use clamp() */
+            --title-size: clamp(2rem, 5.5vw, 4.5rem);
+            --h2-size: clamp(1.5rem, 3.5vw, 2.75rem);
+            --h3-size: clamp(1.1rem, 2.2vw, 1.75rem);
+            --body-size: clamp(0.82rem, 1.4vw, 1.1rem);
+            --small-size: clamp(0.65rem, 1vw, 0.85rem);
+            --badge-size: clamp(0.6rem, 0.9vw, 0.75rem);
+
+            /* Spacing — ALL use clamp() */
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.75rem, 2vw, 2rem);
+            --element-gap: clamp(0.4rem, 1vw, 1rem);
+        }
+
+        /* === RESET === */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* === VIEWPORT BASE (from viewport-base.css — mandatory) === */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-cream);
+            color: var(--text-primary);
+        }
+
+        /* Each slide = exact viewport height, no overflow */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: var(--bg-cream);
+        }
+
+        /* Content container */
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        /* Cards/containers */
+        .card, .container, .content-box {
+            max-width: min(90vw, 1000px);
+            max-height: min(80vh, 700px);
+        }
+
+        /* Lists */
+        .feature-list, .bullet-list {
+            gap: clamp(0.4rem, 1vh, 1rem);
+        }
+
+        .feature-list li, .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.5;
+        }
+
+        /* Images — always constrained */
+        img, .image-container {
+            max-width: 100%;
+            max-height: min(50vh, 400px);
+            object-fit: contain;
+        }
+
+        /* Responsive breakpoints */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.5rem, 4.5vw, 2.75rem);
+                --h2-size: clamp(1.2rem, 3vw, 2rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.1rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+            .nav-dots, .keyboard-hint, .decorative { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.5rem, 8vw, 2.75rem); }
+            .grid-3 { grid-template-columns: 1fr !important; }
+            .split-layout { flex-direction: column !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* === BADGE / LABEL COMPONENT === */
+        /* Matches the PPTX ALL-CAPS outlined label style */
+        .badge {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: var(--badge-size);
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent-warm);
+            border: 1.5px solid var(--accent-warm);
+            padding: clamp(0.2rem, 0.5vw, 0.35rem) clamp(0.5rem, 1.2vw, 0.9rem);
+            border-radius: 2px;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.2rem);
+        }
+
+        /* === SLIDE COUNTER (fixed, bottom-right) === */
+        .slide-counter {
+            position: fixed;
+            bottom: clamp(1rem, 2.5vw, 1.75rem);
+            right: clamp(1.5rem, 4vw, 3rem);
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            opacity: 0.62;
+            z-index: 1000;
+            letter-spacing: 0.06em;
+            pointer-events: none;
+        }
+
+        /* === ARROW NAV (fixed, bottom-left) === */
+        .nav-arrows {
+            position: fixed;
+            bottom: clamp(0.9rem, 2.2vw, 1.6rem);
+            left: clamp(1.5rem, 4vw, 3rem);
+            display: flex;
+            gap: clamp(0.4rem, 1vw, 0.8rem);
+            z-index: 1000;
+        }
+
+        .nav-arrow-btn {
+            background: none;
+            border: 1px solid var(--accent-light);
+            color: var(--text-secondary);
+            font-size: clamp(0.75rem, 1.2vw, 1rem);
+            width: clamp(1.8rem, 3vw, 2.4rem);
+            height: clamp(1.8rem, 3vw, 2.4rem);
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.62;
+            transition: opacity 0.2s ease, border-color 0.2s ease;
+        }
+
+        .nav-arrow-btn:hover {
+            opacity: 0.7;
+            border-color: var(--accent-warm);
+        }
+
+        .nav-arrow-btn:disabled {
+            opacity: 0.15;
+            cursor: default;
+        }
+
+        /* === CLAUDE BADGE (fixed, top-right) === */
+        .claude-badge {
+            position: fixed;
+            top: clamp(0.9rem, 2vw, 1.4rem);
+            right: clamp(1.5rem, 4vw, 3rem);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.25rem, 0.5vw, 0.4rem);
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            opacity: 0.62;
+            z-index: 1000;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .claude-badge-icon {
+            width: clamp(14px, 1.4vw, 20px);
+            height: clamp(14px, 1.4vw, 20px);
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        /* === REVEAL ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+        .slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .slide.visible .reveal:nth-child(2) { transition-delay: 0.18s; }
+        .slide.visible .reveal:nth-child(3) { transition-delay: 0.32s; }
+        .slide.visible .reveal:nth-child(4) { transition-delay: 0.46s; }
+        .slide.visible .reveal:nth-child(5) { transition-delay: 0.60s; }
+        .slide.visible .reveal:nth-child(6) { transition-delay: 0.72s; }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+        }
+        .slide.visible .reveal-left { opacity: 1; transform: translateX(0); }
+
+        /* === PROGRESS BAR === */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-warm);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        /* === LIGHTBOX === */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 12, 8, 0.88);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-overlay img {
+            max-width: min(90vw, 1200px);
+            max-height: 88vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+            transform: scale(0.94);
+            transition: transform 0.3s var(--ease-out-expo);
+            cursor: zoom-out;
+        }
+
+        .lightbox-overlay.active img {
+            transform: scale(1);
+        }
+
+        /* Zoom cursor on zoomable images */
+        .zoomable {
+            cursor: zoom-in;
+        }
+
+        /* === HORIZONTAL RULE DIVIDER === */
+        .divider {
+            width: clamp(2.5rem, 6vw, 5rem);
+            height: 2px;
+            background: var(--accent-warm);
+            margin: clamp(0.5rem, 1.2vw, 1rem) 0;
+        }
+
+        /* ====================================================
+           SLIDE 1: COVER
+           ==================================================== */
+        .slide-cover {
+            background: var(--bg-cream);
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .slide-cover .cover-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+            max-width: min(85vw, 900px);
+        }
+
+        .cover-title {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.2rem);
+        }
+
+        .cover-subtitle {
+            font-family: var(--font-body);
+            font-size: var(--h3-size);
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: clamp(0.4rem, 1vw, 0.8rem);
+        }
+
+        /* Decorative geometric shapes — CSS only, bottom-right */
+        .deco-shapes {
+            position: absolute;
+            bottom: clamp(2rem, 6vh, 5rem);
+            right: clamp(2rem, 6vw, 5rem);
+            width: clamp(80px, 15vw, 180px);
+            height: clamp(80px, 15vw, 180px);
+            pointer-events: none;
+        }
+
+        .deco-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--accent-light);
+        }
+
+        .deco-line {
+            position: absolute;
+            bottom: 20%;
+            left: calc(-1 * clamp(20px, 4vw, 50px));
+            width: clamp(40px, 8vw, 100px);
+            height: 2px;
+            background: var(--accent-light);
+        }
+
+        .deco-dot {
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            width: clamp(6px, 1vw, 12px);
+            height: clamp(6px, 1vw, 12px);
+            border-radius: 50%;
+            background: var(--accent-warm);
+            opacity: 0.5;
+        }
+
+        /* ====================================================
+           SLIDE 2: WELCOME / INTROS
+           ==================================================== */
+        .slide-welcome .slide-content {
+            align-items: flex-start;
+        }
+
+        .slide-welcome h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.15;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.2rem);
+        }
+
+        .intro-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.75rem, 2vw, 1.75rem);
+            margin-top: clamp(0.5rem, 1.5vw, 1.5rem);
+            width: 100%;
+        }
+
+        @media (max-width: 700px) {
+            .intro-cards { grid-template-columns: 1fr; }
+        }
+
+        .intro-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--accent-light);
+            border-top: 3px solid var(--accent-warm);
+            padding: clamp(1rem, 2.5vw, 2rem) clamp(0.75rem, 2vw, 1.5rem);
+            border-radius: 4px;
+        }
+
+        .intro-card-number {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3.5vw, 3rem);
+            font-weight: 900;
+            color: var(--accent-light);
+            line-height: 1;
+            margin-bottom: clamp(0.4rem, 1vw, 0.75rem);
+        }
+
+        .intro-card-title {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 1.8vw, 1.4rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+            line-height: 1.2;
+        }
+
+        .intro-card-desc {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* ====================================================
+           SLIDES 3a & 3b: SECURING YOUR AI (screenshots)
+           ==================================================== */
+        .slide-security .slide-content {
+            align-items: flex-start;
+        }
+
+        .slide-security h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.15;
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+
+        .slide-security .sub-heading {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
+        }
+
+        .screenshot-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.75rem, 2vw, 1.75rem);
+            width: 100%;
+        }
+
+        @media (max-width: 700px) {
+            .screenshot-row { grid-template-columns: 1fr; }
+        }
+
+        .screenshot-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            max-height: min(38vh, 300px);
+            object-fit: contain;
+            object-position: top;
+            border: 1px solid var(--accent-light);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .screenshot-caption {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 600;
+            color: var(--accent-warm);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ====================================================
+           SLIDES 4a: GEMINI GEM — WHAT & WHY
+           ==================================================== */
+        .slide-gem-why .slide-content {
+            align-items: flex-start;
+        }
+
+        .slide-gem-why h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.15;
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+
+        .gem-layout {
+            display: flex;
+            gap: clamp(1rem, 3vw, 3rem);
+            align-items: flex-start;
+            width: 100%;
+            margin-top: clamp(0.5rem, 1.5vw, 1.25rem);
+        }
+
+        @media (max-width: 800px) {
+            .gem-layout { flex-direction: column; }
+            .gem-image-col { width: 100% !important; }
+        }
+
+        .gem-text-col {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .gem-image-col {
+            flex: 0 0 min(42%, 420px);
+        }
+
+        .gem-body-text {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: clamp(0.6rem, 1.5vw, 1.2rem);
+            font-style: italic;
+        }
+
+        .gem-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.35rem, 0.9vw, 0.75rem);
+        }
+
+        .gem-bullets li {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            color: var(--text-primary);
+            display: flex;
+            align-items: flex-start;
+            gap: clamp(0.4rem, 0.8vw, 0.7rem);
+            line-height: 1.5;
+        }
+
+        .gem-bullets li::before {
+            content: '';
+            flex-shrink: 0;
+            width: clamp(5px, 0.7vw, 8px);
+            height: clamp(5px, 0.7vw, 8px);
+            border-radius: 50%;
+            background: var(--accent-warm);
+            margin-top: 0.45em;
+        }
+
+        .gem-image-col img {
+            width: 100%;
+            max-height: min(52vh, 380px);
+            object-fit: contain;
+            object-position: top;
+            border: 1px solid var(--accent-light);
+            border-radius: 10px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+        }
+
+        /* ====================================================
+           SLIDE 4b: GEMINI GEM — HOW TO CREATE
+           ==================================================== */
+        .slide-gem-how .slide-content {
+            align-items: center;
+        }
+
+        .slide-gem-how h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.15;
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+            align-self: flex-start;
+        }
+
+        .slide-gem-how .gem-how-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: clamp(0.5rem, 1.5vw, 1.25rem);
+        }
+
+        .slide-gem-how img {
+            width: min(90%, 860px);
+            max-height: min(50vh, 380px);
+            object-fit: contain;
+            object-position: top;
+            border: 1px solid var(--accent-light);
+            border-radius: 10px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+        }
+
+        .gem-caption {
+            font-family: var(--font-display);
+            font-size: clamp(0.9rem, 1.6vw, 1.25rem);
+            font-style: italic;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* ====================================================
+           SLIDE 5: CLOSING / Q&A
+           ==================================================== */
+        .slide-closing {
+            background: var(--bg-cream);
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .slide-closing .closing-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--slide-padding);
+        }
+
+        .closing-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 9vw, 7.5rem);
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: clamp(0.75rem, 2vw, 1.75rem);
+        }
+
+        .closing-sub {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            letter-spacing: 0.08em;
+        }
+
+        /* Decorative bottom-right for closing slide */
+        .deco-shapes-closing {
+            position: absolute;
+            bottom: clamp(3rem, 8vh, 6rem);
+            right: clamp(3rem, 8vw, 7rem);
+            width: clamp(60px, 12vw, 140px);
+            height: clamp(60px, 12vw, 140px);
+            pointer-events: none;
+        }
+
+        .deco-circle-closing {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--accent-light);
+        }
+
+        .deco-circle-sm {
+            position: absolute;
+            width: 45%;
+            height: 45%;
+            top: 28%;
+            left: 28%;
+            border-radius: 50%;
+            border: 2px solid var(--accent-warm);
+            opacity: 0.4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Presentation progress"></div>
+
+    <!-- Lightbox overlay -->
+    <div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <!-- Slide counter bottom-right -->
+    <div class="slide-counter" id="slideCounter" aria-live="polite">1 / 7</div>
+
+    <!-- Arrow nav bottom-left -->
+    <div class="nav-arrows" role="group" aria-label="Slide navigation arrows">
+        <button class="nav-arrow-btn" id="arrowPrev" aria-label="Previous slide" disabled>&#8592;</button>
+        <button class="nav-arrow-btn" id="arrowNext" aria-label="Next slide">&#8594;</button>
+    </div>
+
+    <!-- Made with Claude Code badge top-right -->
+    <div class="claude-badge" aria-label="Made with Claude Code">
+        <img class="claude-badge-icon" src="data:image/png;base64,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" alt="Claude logo">
+        <span>Made with Claude Code</span>
+    </div>
+
+    <!-- ====================================================
+         SLIDE 1: COVER
+         ==================================================== -->
+    <section class="slide slide-cover" id="slide-0" aria-label="Cover slide">
+        <div class="cover-inner">
+            <span class="badge reveal">AI Cuppa In HV</span>
+            <h1 class="cover-title reveal">AI At Happy<br>Valley Community</h1>
+            <div class="divider reveal"></div>
+            <p class="cover-subtitle reveal">May 2, 2026</p>
+        </div>
+
+        <!-- Decorative CSS shapes — abstract only -->
+        <div class="deco-shapes decorative" aria-hidden="true">
+            <div class="deco-circle"></div>
+            <div class="deco-line"></div>
+            <div class="deco-dot"></div>
+        </div>
+
+    </section>
+
+    <!-- ====================================================
+         SLIDE 2: WELCOME / INTROS
+         ==================================================== -->
+    <section class="slide slide-welcome" id="slide-1" aria-label="Welcome and introductions">
+        <div class="slide-content">
+            <span class="badge reveal">Welcome</span>
+            <h2 class="reveal">Let's go round the table</h2>
+
+            <div class="intro-cards">
+                <div class="intro-card reveal">
+                    <div class="intro-card-number">01</div>
+                    <div class="intro-card-title">Who Am I</div>
+                    <div class="intro-card-desc">Your name, what you do, or how you spend your time</div>
+                </div>
+                <div class="intro-card reveal">
+                    <div class="intro-card-number">02</div>
+                    <div class="intro-card-title">What Brings Me Here</div>
+                    <div class="intro-card-desc">In under 10 words — your honest reason for showing up today</div>
+                </div>
+                <div class="intro-card reveal">
+                    <div class="intro-card-number">03</div>
+                    <div class="intro-card-title">My AI Toolkits</div>
+                    <div class="intro-card-desc">The AI tools you actually use day to day (or want to start)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================
+         SLIDE 3a: SECURING YOUR AI — PART 1
+         ==================================================== -->
+    <section class="slide slide-security" id="slide-2" aria-label="Securing your AI, part 1">
+        <div class="slide-content">
+            <span class="badge reveal">Did You Know?</span>
+            <h2 class="reveal">Stop your AI from training on you</h2>
+            <p class="sub-heading reveal">You can opt out — here's how it looks across tools</p>
+
+            <div class="screenshot-row">
+                <div class="screenshot-item reveal">
+                    <img class="zoomable" src="media/01a_Gemini_Personal_Context.png" alt="Gemini Personal Context settings showing memory and training options" loading="lazy">
+                    <span class="screenshot-caption">Gemini</span>
+                </div>
+                <div class="screenshot-item reveal">
+                    <img class="zoomable" src="media/01b_ChatGPT_Data_Controls.png" alt="ChatGPT Data Controls settings panel" loading="lazy">
+                    <span class="screenshot-caption">ChatGPT</span>
+                </div>
+                <div class="screenshot-item reveal">
+                    <img class="zoomable" src="media/01c_Claude_Personal_Settings.png" alt="Claude Privacy settings with training toggle" loading="lazy">
+                    <span class="screenshot-caption">Claude</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================
+         SLIDE 3b: SECURING YOUR AI — PART 2
+         ==================================================== -->
+    <section class="slide slide-security" id="slide-3" aria-label="Securing your AI, part 2">
+        <div class="slide-content">
+            <span class="badge reveal">Did You Know?</span>
+            <h2 class="reveal">More tools, same setting</h2>
+            <p class="sub-heading reveal">Look for Privacy or Data Controls in each app's settings</p>
+
+            <div class="screenshot-row">
+                <div class="screenshot-item reveal">
+                    <img class="zoomable" src="media/01d_Copilot_Settings.png" alt="Microsoft Copilot Privacy settings with training toggles" loading="lazy">
+                    <span class="screenshot-caption">Copilot</span>
+                </div>
+                <div class="screenshot-item reveal">
+                    <img class="zoomable" src="media/01e_Doubao_Model_Training_Settings.png" alt="Doubao Model Training settings dialog" loading="lazy">
+                    <span class="screenshot-caption">Doubao</span>
+                </div>
+                <div class="screenshot-item reveal">
+                    <img class="zoomable" src="media/01f_perplexity_preferences.png" alt="Perplexity AI data retention preferences" loading="lazy">
+                    <span class="screenshot-caption">Perplexity</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================
+         SLIDE 4a: GEMINI GEM — WHAT & WHY
+         ==================================================== -->
+    <section class="slide slide-gem-why" id="slide-4" aria-label="Gemini Gem introduction">
+        <div class="slide-content">
+            <span class="badge reveal">Gemini Gem</span>
+            <h2 class="reveal">Build your own AI assistant</h2>
+
+            <div class="gem-layout">
+                <div class="gem-text-col">
+                    <p class="gem-body-text reveal">Gems reduce repetitive work — create once, reuse forever.</p>
+                    <ul class="gem-bullets">
+                        <li class="reveal">Versatile enough for any recurring task you have</li>
+                        <li class="reveal">Use Gemini or Grok to write your Gem instructions</li>
+                        <li class="reveal">Just drop the prompt in as you create it</li>
+                    </ul>
+                </div>
+                <div class="gem-image-col">
+                    <img class="reveal zoomable" src="media/02a_Gem_Creation_Prompt.png" alt="Gemini Gem creation prompt showing custom AI assistant instructions" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================
+         SLIDE 4b: GEMINI GEM — HOW TO CREATE
+         ==================================================== -->
+    <section class="slide slide-gem-how" id="slide-5" aria-label="How to create a Gemini Gem">
+        <div class="slide-content">
+            <span class="badge reveal" style="align-self:flex-start">Gemini Gem</span>
+            <h2 class="reveal">Creating your Gem</h2>
+            <div class="gem-how-inner">
+                <img class="reveal zoomable" src="media/02b_Gem_Creation.png" alt="Gemini Gem creation interface showing name, description, instructions and knowledge fields" loading="lazy">
+                <p class="gem-caption reveal">Name it. Describe it. Add instructions. Done.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================
+         SLIDE 5: CLOSING / Q&A
+         ==================================================== -->
+    <section class="slide slide-closing" id="slide-6" aria-label="Questions and closing">
+        <div class="closing-inner">
+            <span class="badge reveal">Questions?</span>
+            <h2 class="closing-title reveal">Ask Me<br>Anything</h2>
+            <div class="divider reveal"></div>
+            <p class="closing-sub reveal">Happy Valley AI Community &nbsp;·&nbsp; May 2026</p>
+        </div>
+
+        <div class="deco-shapes-closing decorative" aria-hidden="true">
+            <div class="deco-circle-closing"></div>
+            <div class="deco-circle-sm"></div>
+        </div>
+
+    </section>
+
+    <script>
+        /* === SLIDE PRESENTATION CONTROLLER === */
+        /* === LIGHTBOX CONTROLLER === */
+        class Lightbox {
+            constructor() {
+                this.overlay = document.getElementById('lightbox');
+                this.img = document.getElementById('lightboxImg');
+                this.isOpen = false;
+
+                // Close on overlay/image click
+                this.overlay.addEventListener('click', () => this.close());
+
+                // Close on Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isOpen) this.close();
+                });
+
+                // Wire up all zoomable images
+                document.querySelectorAll('.zoomable').forEach(img => {
+                    img.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.open(img.src, img.alt);
+                    });
+                });
+            }
+
+            open(src, alt) {
+                this.img.src = src;
+                this.img.alt = alt;
+                this.overlay.classList.add('active');
+                this.isOpen = true;
+                document.body.style.overflow = 'hidden';
+            }
+
+            close() {
+                this.overlay.classList.remove('active');
+                this.isOpen = false;
+                document.body.style.overflow = '';
+            }
+        }
+
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.totalSlides = this.slides.length;
+                this.currentSlide = 0;
+                this.isScrolling = false;
+                this.touchStartY = 0;
+
+                this.progressBar = document.getElementById('progressBar');
+                this.slideCounter = document.getElementById('slideCounter');
+                this.arrowPrev = document.getElementById('arrowPrev');
+                this.arrowNext = document.getElementById('arrowNext');
+
+                this.arrowPrev.addEventListener('click', () => this.goToSlide(this.currentSlide - 1));
+                this.arrowNext.addEventListener('click', () => this.goToSlide(this.currentSlide + 1));
+
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupWheelNav();
+
+                // Mark first slide visible immediately
+                this.slides[0].classList.add('visible');
+                this.updateUI(0);
+            }
+
+            /* Intersection observer — adds .visible to trigger CSS reveals */
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const idx = Array.from(this.slides).indexOf(entry.target);
+                            if (idx !== -1) {
+                                this.currentSlide = idx;
+                                this.updateUI(idx);
+                            }
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            /* Keyboard navigation: arrows, space, page up/down */
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowDown':
+                        case 'ArrowRight':
+                        case ' ':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide + 1);
+                            break;
+                        case 'ArrowUp':
+                        case 'ArrowLeft':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide - 1);
+                            break;
+                        case 'PageDown':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide + 1);
+                            break;
+                        case 'PageUp':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide - 1);
+                            break;
+                        case 'Home':
+                            e.preventDefault();
+                            this.goToSlide(0);
+                            break;
+                        case 'End':
+                            e.preventDefault();
+                            this.goToSlide(this.totalSlides - 1);
+                            break;
+                    }
+                });
+            }
+
+            /* Touch/swipe navigation */
+            setupTouchNav() {
+                document.addEventListener('touchstart', (e) => {
+                    this.touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    const deltaY = this.touchStartY - e.changedTouches[0].clientY;
+                    if (Math.abs(deltaY) > 50) {
+                        this.goToSlide(deltaY > 0 ? this.currentSlide + 1 : this.currentSlide - 1);
+                    }
+                }, { passive: true });
+            }
+
+            /* Mouse wheel navigation with debounce */
+            setupWheelNav() {
+                document.addEventListener('wheel', (e) => {
+                    if (this.isScrolling) return;
+                    this.isScrolling = true;
+                    this.goToSlide(e.deltaY > 0 ? this.currentSlide + 1 : this.currentSlide - 1);
+                    setTimeout(() => { this.isScrolling = false; }, 800);
+                }, { passive: true });
+            }
+
+            /* Navigate to a specific slide index */
+            goToSlide(index) {
+                if (index < 0 || index >= this.totalSlides) return;
+                this.slides[index].scrollIntoView({ behavior: 'smooth' });
+            }
+
+            /* Update progress bar, counter, and arrows */
+            updateUI(index) {
+                const progress = ((index + 1) / this.totalSlides) * 100;
+                this.progressBar.style.width = progress + '%';
+
+                this.slideCounter.textContent = (index + 1) + ' / ' + this.totalSlides;
+
+                this.arrowPrev.disabled = index === 0;
+                this.arrowNext.disabled = index === this.totalSlides - 1;
+            }
+        }
+
+        new SlidePresentation();
+        new Lightbox();
+    </script>
+</body>
+</html>

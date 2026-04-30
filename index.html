@@ -86,6 +86,7 @@
             max-height: 100%;
             overflow: hidden;
             padding: var(--slide-padding);
+            width: 100%;
         }
 
         /* Cards/containers */
@@ -119,6 +120,16 @@
                 --title-size: clamp(1.5rem, 4.5vw, 2.75rem);
                 --h2-size: clamp(1.2rem, 3vw, 2rem);
             }
+            /* Reduce image sizes for short viewports */
+            .slide-security .screenshot-item img {
+                max-height: min(22vh, 200px);
+            }
+            .slide-gem-why .gem-image-col img {
+                max-height: min(30vh, 220px);
+            }
+            .slide-gem-how img {
+                max-height: min(30vh, 220px);
+            }
         }
 
         @media (max-height: 600px) {
@@ -129,6 +140,26 @@
                 --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
             }
             .nav-dots, .keyboard-hint, .decorative { display: none; }
+
+            /* Further reduce image sizes for very short viewports */
+            .slide-security .screenshot-item img {
+                max-height: min(18vh, 160px);
+            }
+            .slide-security .screenshot-caption {
+                font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+            }
+            .slide-gem-why .gem-image-col img {
+                max-height: min(24vh, 180px);
+            }
+            .slide-gem-why .gem-body-text {
+                font-size: clamp(0.72rem, 1vw, 0.85rem);
+            }
+            .slide-gem-how img {
+                max-height: min(24vh, 180px);
+            }
+            .slide-gem-how .gem-caption {
+                font-size: clamp(0.7rem, 1vw, 0.85rem);
+            }
         }
 
         @media (max-height: 500px) {
@@ -138,10 +169,24 @@
                 --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
                 --body-size: clamp(0.65rem, 1vw, 0.85rem);
             }
+
+            /* Minimal image sizes for portrait mobile */
+            .slide-security .screenshot-item img {
+                max-height: min(14vh, 120px);
+            }
+            .slide-gem-why .gem-image-col img {
+                max-height: min(20vh, 140px);
+            }
+            .slide-gem-how img {
+                max-height: min(20vh, 140px);
+            }
         }
 
-        @media (max-width: 600px) {
-            :root { --title-size: clamp(1.5rem, 8vw, 2.75rem); }
+        @media (max-width: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 4vw, 2rem);
+                --title-size: clamp(1.5rem, 8vw, 2.75rem);
+            }
             .grid-3 { grid-template-columns: 1fr !important; }
             .split-layout { flex-direction: column !important; }
         }
@@ -487,12 +532,41 @@
         .screenshot-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: clamp(0.75rem, 2vw, 1.75rem);
+            gap: clamp(0.5rem, 1.5vw, 1rem);
             width: 100%;
         }
 
+        /* Mobile: keep 3 columns but reduce image height so everything fits */
         @media (max-width: 700px) {
-            .screenshot-row { grid-template-columns: 1fr; }
+            .slide-security h2 {
+                font-size: clamp(1.1rem, 5vw, 1.6rem);
+                margin-bottom: 0.25rem;
+            }
+            .slide-security .sub-heading {
+                font-size: clamp(0.72rem, 3vw, 0.9rem);
+                margin-bottom: clamp(0.4rem, 1.5vw, 0.75rem);
+            }
+            .screenshot-row {
+                grid-template-columns: repeat(3, 1fr);
+                gap: clamp(0.3rem, 1.5vw, 0.6rem);
+            }
+            .screenshot-item img {
+                max-height: min(28vw, 180px);
+            }
+            .screenshot-caption {
+                font-size: clamp(0.55rem, 2.2vw, 0.72rem);
+            }
+        }
+
+        @media (max-height: 700px) {
+            .screenshot-row {
+                gap: clamp(0.3rem, 0.5vw, 0.5rem);
+            }
+        }
+        @media (max-height: 600px) {
+            .screenshot-row {
+                gap: clamp(0.2rem, 0.3vw, 0.3rem);
+            }
         }
 
         .screenshot-item {
